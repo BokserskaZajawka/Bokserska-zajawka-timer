@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bokserska Zajawka Timer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101010;color:#fff;font-family:Arial,sans-serif;text-align:center;padding:22px}h1{color:#f22}button,select{background:#292929;color:white;border:1px solid #f22;border-radius:10px;padding:14px;font-size:17px;margin:6px}#time{font-size:clamp(70px,20vw,120px);font-weight:bold;margin:30px 0;color:#f22}.panel{background:#1c1c1c;border-radius:16px;padding:18px;margin:14px auto;max-width:500px}.combo{font-size:25px;min-height:90px;display:grid;place-items:center;color:#fff}button:active{background:#a00}
+</style>
+</head>
+<body>
+<h1>🥊 BOKSERSKA ZAJAWKA</h1>
+<h2>ROUND TIMER</h2>
+<div class="panel">
+<label>Poziom </label><select id="level"><option value="45">Początkujący</option><option value="60">Zaawansowany</option></select>
+<p>Runda: <select id="roundLen"><option value="180">3 minuty</option><option value="120">2 minuty</option></select></p>
+<p>Przerwa: <select id="restLen"><option value="60">60 sekund</option><option value="30">30 sekund</option></select></p>
+<div id="phase
+<div id="time">03:00</div>
+<div class="combo" id="combo">Gotowy do treningu?</div>
+<button onclick="start()">START</button><button onclick="pause()">PAUZA</button><button onclick="reset()">RESET</button>
+</div>
+<script>
+let remaining=180, timer=null, rest=false;
+let combos=['Lewy prosty','Prawy prosty','Lewy-prawy','Lewy-prawy-lewy','Unik i kontra','Lewy sierp','Prawy sierp'];
+function show(){document.getElementById('time').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');document.getElementById('phase').textContent=rest?'PRZERWA':'RUNDA'}
+function gong(){try{let c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.frequency.value=440;g.gain.setValueAtTime(.5,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+1);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+1)}catch(e){}}
+function start(){if(timer)return;gong();timer=setInterval(()=>{remaining--;if(remaining<=0){gong();clearInterval(timer);timer=null;rest=!rest;remaining=Number(document.getElementById(rest?'restLen':'roundLen').value);show();if(!rest)document.getElementById('combo').textContent=combos[Math.floor(Math.random()*combos.length)];start();return}show()},1000)}
+function pause(){clearInterval(timer);timer=null}
+function reset(){pause();rest=false;remaining=Number(document.getElementById('roundLen').value);document.getElementById('combo').textContent='Gotowy do treningu?';show()}
+document.getElementById('roundLen').onchange=()=>{if(!rest){remaining=Number(document.getElementById('roundLen').value);show()}};show();
+</script>
+</body></html>
+
