@@ -2,7 +2,8 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bokserska Zajawka Timer</title>
+<title>Bokserska Zajaw
+    grep -n 'AndroidTTS\|voiceEvery\|voiceInterval' app/src/main/assets/index.htmlka Timer</title>
 <style>
 *{box-sizing:border-box}body{margin:0;padding:20px;background:#10131b;color:#fff;font-family:Arial,sans-serif;text-align:center}h1{color:#ffb52e;font-size:27px}h2{font-size:16px;color:#ddd}.panel{max-width:430px;margin:auto;background:#202635;padding:20px;border-radius:18px}label{display:block;text-align:left;margin-top:14px;color:#ddd}select,button{width:100%;padding:13px;margin-top:7px;border:0;border-radius:9px;font-size:17px}select{background:#fff;color:#111}#time{font-size:76px;font-weight:bold;margin:25px 0;color:#ffb52e}#phase{font-size:22px;min-height:30px}.buttons{display:flex;gap:8px}.buttons button{font-weight:bold}.start{background:#28bd70;color:#07180e}.pause{background:#ffc247;color:#171000}.reset{background:#f05a55;color:white}#combo{min-height:48px;margin:20px 0;font-size:21px;color:#fff}
 </style></head><body><h1>🥊 BOKSERSKA ZAJAWKA</h1><h2>ROUND TIMER</h2><div class="panel">
@@ -15,7 +16,7 @@
 let remaining=180, timer=null, rest=false, elapsed=0, roundNo=1;
 const $=id=>document.getElementById(id);
 function show(){let m=Math.floor(remaining/60),s=remaining%60;$('time').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('phase').textContent=rest?'PRZERWA':'RUNDA '+roundNo;}
-function speak(t){try{if(window.AndroidTTS&&typeof window.AndroidTTS.speak==='function'){window.AndroidTTS.speak(t);return;}if('speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='pl-PL';speechSynthesis.speak(u);}}catch(e){}}
+function speak(t){try{if(window.AndroidTTS&&window.AndroidTTS.speak){window.AndroidTTS.speak(String(t));return;}if("speechSynthesis" in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t));u.lang="pl-PL";speechSynthesis.speak(u);}}catch(e){console.log(e);}}
 function startTimer(){if(timer!==null)return;if(remaining<=0)resetTimer();$('phase').textContent=rest?'PRZERWA':'RUNDA '+roundNo;timer=setInterval(tick,1000);}
 function pauseTimer(){if(timer!==null){clearInterval(timer);timer=null;}$('combo').textContent='Pauza';}
 function resetTimer(){if(timer!==null)clearInterval(timer);timer=null;rest=false;elapsed=0;roundNo=1;remaining=Number($('roundLen').value);$('phase').textContent='Gotowy do treningu?';$('combo').textContent='Wybierz ustawienia i naciśnij START';show();}
